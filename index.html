@@ -10,15 +10,111 @@
     <header>
         <h1>Cute Services Staff Portal</h1>
         <nav>
-            <a href="#">Home</a>
+            <a href="https://princeprey.github.io/cute-services-owner/">Owner Portal</a>
+            <a href="https://princeprey.github.io/cute-services-staff/">Staff Portal</a>
+            <a href="https://princeprey.github.io/cute-services-reseller/">Reseller Portal</a>
         </nav>
     </header>
     <main>
-        <h2>Welcome to the Staff Portal</h2>
-        <p>This portal is for staff members like Hattori and Wolve to manage orders and mark them as fulfilled.</p>
+        <h2>Welcome, Staff Member</h2>
+        <div class="staff-selector">
+            <label for="staffName">Select your name:</label>
+            <select id="staffName">
+                <option value="Hattori">Hattori</option>
+                <option value="Wolve">Wolve</option>
+            </select>
+        </div>
+        <section id="unassignedSection">
+            <h3>Unassigned Orders</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="unassignedOrders"></tbody>
+            </table>
+        </section>
+        <section id="assignedSection">
+            <h3>Your Assigned Orders</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Name on Order</th>
+                        <th>Order Value</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="assignedOrders"></tbody>
+            </table>
+        </section>
     </main>
     <footer>
-        <p>&copy; 2025 Cute Services. All rights reserved.</p>
+        &copy; 2025 Cute Services. All rights reserved.
     </footer>
+    <script>
+        function loadOrders() {
+            const staffName = document.getElementById('staffName').value;
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const unassignedBody = document.getElementById('unassignedOrders');
+            const assignedBody = document.getElementById('assignedOrders');
+            unassignedBody.innerHTML = '';
+            assignedBody.innerHTML = '';
+            orders.forEach(order => {
+                if (order.status === 'New') {
+                    const row = document.createElement('tr');
+                    row.innerHTML =
+                        '<td>' + order.id + '</td>' +
+                        '<td>' + (order.category || '') + '</td>' +
+                        '<td>' + (order.description || '') + '</td>' +
+                        '<td><button onclick="acceptOrder(' + order.id + ')">Accept</button></td>';
+                    unassignedBody.appendChild(row);
+                } else if (order.status === 'In Progress' && order.assignedTo === staffName) {
+                    const row = document.createElement('tr');
+                    row.innerHTML =
+                        '<td>' + order.id + '</td>' +
+                        '<td>' + (order.category || '') + '</td>' +
+                        '<td>' + (order.description || '') + '</td>' +
+                        '<td><input type="text" id="name_' + order.id + '" placeholder="Name on order"></td>' +
+                        '<td><input type="number" id="value_' + order.id + '" placeholder="Value"></td>' +
+                        '<td><button onclick="completeOrder(' + order.id + ')">Complete</button></td>';
+                    assignedBody.appendChild(row);
+                }
+            });
+        }
+        function acceptOrder(id) {
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const staffName = document.getElementById('staffName').value;
+            orders = orders.map(order => {
+                if (order.id === id) {
+                    return Object.assign({}, order, { status: 'In Progress', assignedTo: staffName });
+                }
+                return order;
+            });
+            localStorage.setItem('orders', JSON.stringify(orders));
+            loadOrders();
+        }
+        function completeOrder(id) {
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const name = document.getElementById('name_' + id).value;
+            const value = parseFloat(document.getElementById('value_' + id).value);
+            orders = orders.map(order => {
+                if (order.id === id) {
+                    return Object.assign({}, order, { status: 'Completed', nameOnOrder: name, orderValue: value });
+                }
+                return order;
+            });
+            localStorage.setItem('orders', JSON.stringify(orders));
+            loadOrders();
+        }
+        document.getElementById('staffName').addEventListener('change', loadOrders);
+        window.onload = loadOrders;
+    </script>
 </body>
 </html>
