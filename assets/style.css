@@ -1,29 +1,106 @@
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
-  background-color: #f6f6f6;
+  font-family: Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
 }
 
 header {
-  background-color: #333;
+  background-color: #2e3a59;
   color: #fff;
-  padding: 1rem;
+  padding: 10px 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+nav {
+  margin-top: 10px;
 }
 
 nav a {
   color: #fff;
-  margin-right: 1rem;
+  margin-right: 15px;
   text-decoration: none;
 }
 
+nav a:hover {
+  text-decoration: underline;
+}
+
 main {
-  padding: 2rem;
+  padding: 20px;
+  max-width: 960px;
+  margin: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f2f2f2;
+}
+
+button {
+  padding: 6px 12px;
+  margin: 2px;
+  cursor: pointer;
+  background-color: #2e3a59;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.metric {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  margin: 10px;
+  background-color: #fff;
+  flex: 1;
+}
+
+#metrics {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.order-status-new {
+  color: orange;
+}
+
+.order-status-assigned {
+  color: blue;
+}
+
+.order-status-completed {
+  color: green;
 }
 
 footer {
   text-align: center;
-  padding: 1rem;
+  padding: 10px;
   background-color: #333;
   color: #fff;
+  margin-top: 40px;
+}
+
+.staff-selector {
+  margin-bottom: 10px;
 }
